@@ -53,7 +53,7 @@ export function apiError(err:unknown):AppError{
     return {status:0,code:"NETWORK", message:"No se pudo conectar con el servidor. Revisa tu conexion"};
 }
 
-export function useFetcht<T>(url:string | null) {
+export function useFetch<T>(url:string | null) {
     const [data, setData] = useState<T|null>(null);
     const [loading, setLoading]= useState(url !==null);
     const [error, setError] = useState("");
