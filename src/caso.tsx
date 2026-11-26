@@ -85,9 +85,9 @@ export function DetailPage() {
         </Field>
         {apiErr && <Alert>{apiErr}</Alert>}
         {result && <Alert ok>{result}</Alert>}
-        <button type="submit" disabled={sending}>{sending ? "Enviando..." : "Reservar"}</button>
+        <button type="submit" disabled={sending}>{sending ? "Enviando..." : "Prestar"}</button>
       </form>
-      <Link to="/my-loans" className="text-blue-600 underline">Ver mis reservas</Link>
+      <Link to="/my-loans" className="text-blue-600 underline">Ver mis prestamos</Link>
     </section>
   );
 }
@@ -98,27 +98,27 @@ function MyBookingsPage() {
   const [apiErr, setApiErr] = useState("");
 
   const cancel = async (b: Booking) => {
-    if (!window.confirm(`¿Cancelar la reserva #${b.id} de ${b.resourceName}?`)) return;
+    if (!window.confirm(`¿Cancelar el prestamo #${b.id} de ${b.resourceName}?`)) return;
     setMsg("");
     setApiErr("");
     try {
       await api.patch(`/bookings/${b.id}/cancel`);
-      setMsg(`Reserva #${b.id} cancelada.`);
+      setMsg(`Prestamo #${b.id} cancelada.`);
     } catch (err) {
       const x = apiError(err);
-      setApiErr(x.code === INVALID_STATE ? "La reserva cambió de estado. Se actualizó la lista." : x.message);
+      setApiErr(x.code === INVALID_STATE ? "el prestamo cambió de estado. Se actualizó la lista." : x.message);
     }
     reload(); 
   };
 
   return (
     <section className="space-y-4">
-      <h1 className="text-2xl font-bold">Mis reservas</h1>
+      <h1 className="text-2xl font-bold">Mis prestamos</h1>
       {loading && <p className="text-gray-500">Cargando...</p>}
       {error && <div className="flex flex-wrap items-center gap-3"><Alert>{error}</Alert><button onClick={reload}>Reintentar</button></div>}
       {msg && <Alert ok>{msg}</Alert>}
       {apiErr && <Alert>{apiErr}</Alert>}
-      {!loading && data?.length === 0 && <p>Todavía no tienes reservas.</p>}
+      {!loading && data?.length === 0 && <p>Todavía no tienes prestamos.</p>}
       <ul className="space-y-2">
         {data?.map((b) => (
           <li key={b.id} className="flex flex-wrap items-center justify-between gap-2 rounded border p-3">
@@ -131,7 +131,7 @@ function MyBookingsPage() {
   );
 }
 
-export const EXTRA: ExtraView[] = [{ path: "/my-loans", label: "Mis reservas", element: <MyBookingsPage /> }];
+export const EXTRA: ExtraView[] = [{ path: "/my-loans", label: "Mis prestamos", element: <MyBookingsPage /> }];
 
 
 
