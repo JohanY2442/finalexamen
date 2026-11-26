@@ -87,7 +87,7 @@ export function DetailPage() {
         {result && <Alert ok>{result}</Alert>}
         <button type="submit" disabled={sending}>{sending ? "Enviando..." : "Reservar"}</button>
       </form>
-      <Link to="/my-bookings" className="text-blue-600 underline">Ver mis reservas</Link>
+      <Link to="/my-loans" className="text-blue-600 underline">Ver mis reservas</Link>
     </section>
   );
 }
@@ -131,7 +131,7 @@ function MyBookingsPage() {
   );
 }
 
-export const EXTRA: ExtraView[] = [{ path: "/my-bookings", label: "Mis reservas", element: <MyBookingsPage /> }];
+export const EXTRA: ExtraView[] = [{ path: "/my-loans", label: "Mis reservas", element: <MyBookingsPage /> }];
 
 
 
