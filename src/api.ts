@@ -65,7 +65,7 @@ export function useFetcht<T>(url:string | null) {
         setLoading(true);
         setError("");
         api.get<T>(url)
-            .then ((res) => {if (!ignore)setData (res.Data);})
+            .then ((res) => {if (!ignore)setData (res.data);})
             .catch((err) => {if (!ignore)setError(apiError(err).message);})
             .finally(()=>{if (!ignore)setLoading(false);});        
 
