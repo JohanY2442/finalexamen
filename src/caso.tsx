@@ -16,7 +16,7 @@ const INVALID_STATE = "INVALID_STATE";
 
 export type Item = { id: number; title: string; author: string; category: string; availableCopies: number; description: string };
 type Detail = Item;
-type Booking = { id: number; resourceId: number; resourceName: string; attendees: number; status: string };
+type Booking = { id: number; resourceId: number; resourceName: string; days: number; status: string };
 
 export function ItemCard({ item }: { item: Item }) {
   return (
@@ -32,7 +32,7 @@ export function ItemCard({ item }: { item: Item }) {
 export function DetailPage() {
   const { id } = useParams();
   const { data, loading, error, reload } = useFetch<Detail>(`${PATH}/${id}`);
-  const [form, setForm] = useState({ attendees: "" });
+  const [form, setForm] = useState({ days: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [result, setResult] = useState("");
   const [apiErr, setApiErr] = useState("");
@@ -45,9 +45,9 @@ export function DetailPage() {
 
   const validate = () => {
     const e: Record<string, string> = {};
-    const n = Number(form.attendees);
-    if (form.attendees === "" || !Number.isInteger(n) || n < MIN || n > MAX)
-      e.attendees = `Ingresa un número entero entre ${MIN} y ${MAX}.`;
+    const n = Number(form.days);
+    if (form.days === "" || !Number.isInteger(n) || n < MIN || n > MAX)
+      e.days = `Ingresa un número entero entre ${MIN} y ${MAX}.`;
     return e;
   };
 
@@ -60,9 +60,9 @@ export function DetailPage() {
     if (Object.keys(e).length > 0) return;
     setSending(true);
     try {
-      await api.post(`${PATH}/${id}/bookings`, { attendees: Number(form.attendees) });
-      setResult("Reserva confirmada.");
-      setForm({ attendees: "" });
+      await api.post(`${PATH}/${id}/bookings`, { days: Number(form.days) });
+      setResult("Prestamo confirmada.");
+      setForm({ days: "" });
       reload(); 
     } catch (err) {
       const x = apiError(err);
@@ -80,8 +80,8 @@ export function DetailPage() {
       <p>{data.description}</p>
       <p>Edificio: {data.author} · Piso: {data.category} · Turnos disponibles: {data.availableCopies}</p>
       <form onSubmit={onSubmit} noValidate className="space-y-3 rounded border p-4">
-        <Field label="Número de asistentes" error={errors.attendees}>
-          <input name="attendees" type="number" min={MIN} max={MAX} step={1} value={form.attendees} onChange={onChange} />
+        <Field label="Número de asistentes" error={errors.days}>
+          <input name="days" type="number" min={MIN} max={MAX} step={1} value={form.days} onChange={onChange} />
         </Field>
         {apiErr && <Alert>{apiErr}</Alert>}
         {result && <Alert ok>{result}</Alert>}
@@ -122,7 +122,7 @@ function MyBookingsPage() {
       <ul className="space-y-2">
         {data?.map((b) => (
           <li key={b.id} className="flex flex-wrap items-center justify-between gap-2 rounded border p-3">
-            <p>#{b.id} · <span className="font-semibold">{b.resourceName}</span> · {b.attendees} asistente(s) · {b.status === "ACTIVE" ? "Activa" : "Cancelada"}</p>
+            <p>#{b.id} · <span className="font-semibold">{b.resourceName}</span> · {b.days} asistente(s) · {b.status === "ACTIVE" ? "Activa" : "Cancelada"}</p>
             {b.status === "ACTIVE" && <button onClick={() => cancel(b)}>Cancelar</button>}
           </li>
         ))}
